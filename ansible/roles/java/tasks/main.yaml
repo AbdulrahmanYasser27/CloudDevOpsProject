@@ -1,0 +1,17 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Java 17
+  apt:
+    name: openjdk-17-jdk
+    state: present
+
+- name: Verify Java installation
+  command: java -version
+  register: java_version
+
+- name: Print Java version
+  debug:
+    msg: "{{ java_version.stderr }}"
