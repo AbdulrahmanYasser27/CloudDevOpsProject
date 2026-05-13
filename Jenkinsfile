@@ -4,7 +4,10 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "abdulrahman1235/python-app:${BUILD_NUMBER}"
+        ECR_REGISTRY = "781978598486.dkr.ecr.us-east-1.amazonaws.com"
+        ECR_REPO     = "clouddevops-app"
+        IMAGE_NAME   = "${ECR_REGISTRY}/${ECR_REPO}:${BUILD_NUMBER}"
+        AWS_REGION   = "us-east-1"
     }
 
     stages {
@@ -22,7 +25,7 @@ pipeline {
 
         stage('Push Image') {
             steps {
-                pushImage("${IMAGE_NAME}")
+                pushImage("${IMAGE_NAME}", "${ECR_REGISTRY}", "${AWS_REGION}")
             }
         }
 

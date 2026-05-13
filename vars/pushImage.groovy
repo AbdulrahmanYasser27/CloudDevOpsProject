@@ -1,13 +1,8 @@
-def call(String imageName) {
-    echo "Pushing image: ${imageName}"
-    withCredentials([usernamePassword(
-        credentialsId: 'dockerhub-credentials',
-        usernameVariable: 'DOCKER_USER',
-        passwordVariable: 'DOCKER_PASS'
-    )]) {
-        sh """
-            echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin
-            docker push ${imageName}
-        """
-    }
+def call(String imageName, String ecrRegistry, String awsRegion) {
+    echo "Pushing image to ECR: ${imageName}"
+    sh """
+        aws ecr get-login-password --region ${awsRegion} | \
+        docker login --username AWS --password-stdin ${ecrRegistry}
+        docker push ${imageName}
+    """
 }
